@@ -85,13 +85,13 @@ const INITIAL_USERS: User[] = [
   {
     id: 'user-admin',
     username: 'admin',
-    fullName: 'Dr. Carlos Eduardo (Diretor)',
-    email: 'carlos@pharmaroute.com.br',
+    fullName: 'Rodrigo',
+    email: 'rodrigo@pharmaroute.com.br',
     phone: '(11) 98765-4321',
     roleType: 'admin',
     status: 'active',
-    city: 'São Paulo',
-    state: 'SP',
+    city: 'Timbo',
+    state: 'SC',
     createdAt: new Date('2026-01-10').toISOString(),
     updatedAt: new Date('2026-01-10').toISOString(),
     lastAccess: new Date().toISOString()
