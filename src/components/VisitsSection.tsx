@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Calendar, 
   Clock, 
@@ -21,7 +21,9 @@ import {
   Compass,
   List,
   CalendarDays,
-  ArrowLeft
+  ArrowLeft,
+  Trash2,
+  AlertTriangle
 } from 'lucide-react';
 import { DB } from '../services/db';
 import { Visit, Pharmacy, User as UserType } from '../types';
@@ -33,9 +35,11 @@ interface VisitsSectionProps {
 }
 
 export default function VisitsSection({ currentUser, preSelectedPharmacyId, onClearPreSelection }: VisitsSectionProps) {
-  const visits = DB.getVisits();
-  const pharmacies = DB.getPharmacies().filter(p => p.status === 'active' && (currentUser.roleType === 'admin' || p.assignedSellerId === currentUser.id));
-  const sellers = DB.getUsers().filter(u => u.roleType === 'seller');
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const visits = useMemo(() => DB.getVisits(), [refreshKey]);
+  const pharmacies = useMemo(() => DB.getPharmacies().filter(p => p.status === 'active' && (currentUser.roleType === 'admin' || p.assignedSellerId === currentUser.id)), [currentUser, refreshKey]);
+  const sellers = useMemo(() => DB.getUsers().filter(u => u.roleType === 'seller'), [refreshKey]);
 
   // View state
   const [viewMode, setViewMode] = useState<'calendar' | 'list' | 'schedule'>('calendar');
@@ -61,6 +65,10 @@ export default function VisitsSection({ currentUser, preSelectedPharmacyId, onCl
   const [reschedulingVisitId, setReschedulingVisitId] = useState<string | null>(null);
   const [rescheduleDate, setRescheduleDate] = useState('2026-07-02');
   const [rescheduleTime, setRescheduleTime] = useState('11:00');
+
+  // Delete Visit State
+  const [deletingVisitId, setDeletingVisitId] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState('');
 
   // Calendar setup helpers
   const monthNames = [
@@ -126,6 +134,7 @@ export default function VisitsSection({ currentUser, preSelectedPharmacyId, onCl
       setFormObjective('');
       setFormNotes('');
       if (onClearPreSelection) onClearPreSelection();
+      setRefreshKey(prev => prev + 1);
 
       setTimeout(() => {
         setSuccessMsg('');
@@ -150,6 +159,7 @@ export default function VisitsSection({ currentUser, preSelectedPharmacyId, onCl
         status: 'scheduled'
       });
       setReschedulingVisitId(null);
+      setRefreshKey(prev => prev + 1);
     }
   };
 
@@ -160,8 +170,25 @@ export default function VisitsSection({ currentUser, preSelectedPharmacyId, onCl
         ...original,
         status: 'canceled'
       });
+      setRefreshKey(prev => prev + 1);
     }
   };
+
+  const confirmDeleteVisit = () => {
+    if (!deletingVisitId) return;
+    try {
+      DB.deleteVisit(deletingVisitId);
+      setDeletingVisitId(null);
+      setRefreshKey(prev => prev + 1);
+    } catch (err: any) {
+      setDeleteError(err.message || 'Erro ao remover visita do sistema.');
+    }
+  };
+
+  const deletingVisitObj = useMemo(() => {
+    if (!deletingVisitId) return null;
+    return visits.find(v => v.id === deletingVisitId);
+  }, [deletingVisitId, visits]);
 
   const cities = Array.from(new Set(pharmacies.map(p => p.city)));
 
@@ -353,27 +380,42 @@ export default function VisitsSection({ currentUser, preSelectedPharmacyId, onCl
 
                     <p className="text-[11px] text-gray-600 italic">"Objetivo: {visit.objective}"</p>
 
-                    {/* Reschedule/Cancel shortcuts */}
-                    {!isCompleted && !isCanceled && (
-                      <div className="flex justify-end gap-1.5 pt-2 border-t border-gray-100 text-[10px]">
-                        <button 
-                          onClick={() => handleCancelVisit(visit.id)}
-                          className="text-red-500 hover:underline cursor-pointer"
-                        >
-                          Cancelar
-                        </button>
-                        <button 
-                          onClick={() => {
-                            setReschedulingVisitId(visit.id);
-                            setRescheduleDate(visit.scheduledDate);
-                            setRescheduleTime(visit.scheduledTime);
-                          }}
-                          className="text-indigo-500 hover:underline font-bold cursor-pointer"
-                        >
-                          Reagendar
-                        </button>
-                      </div>
-                    )}
+                     {/* Action shortcuts */}
+                     <div className="flex justify-between items-center pt-2 border-t border-gray-100 text-[10px] mt-1">
+                       {currentUser.roleType === 'admin' ? (
+                         <button 
+                           onClick={() => {
+                             setDeletingVisitId(visit.id);
+                             setDeleteError('');
+                           }}
+                           className="text-red-600 hover:text-red-800 font-bold flex items-center gap-0.5 cursor-pointer"
+                           title="Remover Visita permanentemente"
+                         >
+                           <Trash2 className="w-3 h-3 text-red-500" /> Excluir
+                         </button>
+                       ) : <span />}
+
+                       {!isCompleted && !isCanceled && (
+                         <div className="flex gap-1.5">
+                           <button 
+                             onClick={() => handleCancelVisit(visit.id)}
+                             className="text-red-500 hover:underline cursor-pointer font-medium"
+                           >
+                             Cancelar
+                           </button>
+                           <button 
+                             onClick={() => {
+                               setReschedulingVisitId(visit.id);
+                               setRescheduleDate(visit.scheduledDate);
+                               setRescheduleTime(visit.scheduledTime);
+                             }}
+                             className="text-indigo-500 hover:underline font-bold cursor-pointer"
+                           >
+                             Reagendar
+                           </button>
+                         </div>
+                       )}
+                     </div>
                   </div>
                 );
               })}
@@ -431,11 +473,25 @@ export default function VisitsSection({ currentUser, preSelectedPharmacyId, onCl
                         )}
                       </td>
                       <td className="p-4 text-right">
-                        <span className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                          visit.status === 'completed' ? 'bg-green-50 text-green-700' : (visit.status === 'scheduled' ? 'bg-indigo-50 text-indigo-700' : 'bg-red-50 text-red-700')
-                        }`}>
-                          {visit.status === 'completed' ? 'Concluída' : (visit.status === 'scheduled' ? 'Agendada' : 'Cancelada')}
-                        </span>
+                        <div className="flex items-center justify-end gap-2">
+                          <span className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                            visit.status === 'completed' ? 'bg-green-50 text-green-700' : (visit.status === 'scheduled' ? 'bg-indigo-50 text-indigo-700' : 'bg-red-50 text-red-700')
+                          }`}>
+                            {visit.status === 'completed' ? 'Concluída' : (visit.status === 'scheduled' ? 'Agendada' : 'Cancelada')}
+                          </span>
+                          {currentUser.roleType === 'admin' && (
+                            <button
+                              onClick={() => {
+                                setDeletingVisitId(visit.id);
+                                setDeleteError('');
+                              }}
+                              className="text-red-500 hover:text-red-700 p-1.5 rounded hover:bg-red-50 transition-colors cursor-pointer"
+                              title="Excluir Visita"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -570,6 +626,74 @@ export default function VisitsSection({ currentUser, preSelectedPharmacyId, onCl
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE VISIT CONFIRMATION MODAL */}
+      {deletingVisitId && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full border border-gray-100 overflow-hidden transform scale-100 transition-all text-left text-xs">
+            <div className="bg-red-50 p-5 border-b border-red-100 flex justify-between items-center">
+              <div className="flex items-center gap-2 text-red-900">
+                <AlertTriangle className="w-5 h-5 text-red-600 animate-pulse" />
+                <h3 className="font-bold text-sm">Remover Registro de Visita</h3>
+              </div>
+              <button 
+                onClick={() => setDeletingVisitId(null)}
+                className="text-gray-400 hover:text-gray-600 font-bold text-base cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {deleteError && (
+                <div className="p-3 bg-red-50 text-red-700 border border-red-100 rounded-lg text-xs font-semibold">
+                  {deleteError}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  Tem certeza de que deseja remover o registro desta visita de forma definitiva?
+                </p>
+                {deletingVisitObj ? (
+                  <div className="p-3.5 bg-slate-50 border border-gray-100 rounded-xl">
+                    <p className="font-bold text-gray-900 text-xs">
+                      Farmácia: {pharmacies.find(p => p.id === deletingVisitObj.pharmacyId)?.name || 'Farmácia'}
+                    </p>
+                    <p className="text-[10px] text-gray-400 font-mono mt-0.5">
+                      Data: {new Date(deletingVisitObj.scheduledDate).toLocaleDateString('pt-BR')} às {deletingVisitObj.scheduledTime}h • Objetivo: {deletingVisitObj.objective}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-slate-50 border border-gray-100 rounded-xl">
+                    <p className="font-semibold text-gray-800 text-xs">Visita selecionada</p>
+                  </div>
+                )}
+                <p className="text-[11px] text-red-500 font-medium leading-relaxed">
+                  ⚠️ Esta ação removerá o registro da visita permanentemente do histórico e do banco de dados (local e Back4App)!
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
+                <button 
+                  type="button"
+                  onClick={() => setDeletingVisitId(null)}
+                  className="px-4 py-2 bg-slate-50 border border-gray-200 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  type="button"
+                  onClick={confirmDeleteVisit}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                >
+                  Confirmar Exclusão
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

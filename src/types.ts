@@ -260,7 +260,7 @@ export interface SystemLog {
   companyId: string;
   userId: string;
   action: string;
-  className: string;
+  targetClass: string;
   objectId: string;
   description: string;
   ip?: string;

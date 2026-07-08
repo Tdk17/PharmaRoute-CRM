@@ -95,613 +95,34 @@ const INITIAL_USERS: User[] = [
     createdAt: new Date('2026-01-10').toISOString(),
     updatedAt: new Date('2026-01-10').toISOString(),
     lastAccess: new Date().toISOString()
-  },
-  {
-    id: 'user-seller-rodrigo',
-    username: 'rodrigo',
-    fullName: 'Rodrigo Silva',
-    email: 'rodrigo@pharmaroute.com.br',
-    phone: '(11) 97654-3210',
-    roleType: 'seller',
-    status: 'active',
-    city: 'Campinas',
-    state: 'SP',
-    createdBy: 'user-admin',
-    createdAt: new Date('2026-02-15').toISOString(),
-    updatedAt: new Date('2026-02-15').toISOString(),
-    lastAccess: new Date().toISOString()
-  },
-  {
-    id: 'user-seller-mariana',
-    username: 'mariana',
-    fullName: 'Mariana Costa',
-    email: 'mariana@pharmaroute.com.br',
-    phone: '(19) 98888-7777',
-    roleType: 'seller',
-    status: 'active',
-    city: 'Ribeirão Preto',
-    state: 'SP',
-    createdBy: 'user-admin',
-    createdAt: new Date('2026-03-01').toISOString(),
-    updatedAt: new Date('2026-03-01').toISOString(),
-    lastAccess: new Date().toISOString()
   }
 ];
 
-const INITIAL_PRODUCTS: Product[] = [
-  {
-    id: 'prod-1',
-    companyId: 'company-1',
-    name: 'Dipirona Monoidratada 500mg',
-    brand: 'Medley Genéricos',
-    description: 'Analgésico e antitérmico eficaz, cartucho com 30 comprimidos.',
-    sku: 'MED-DIP-500',
-    barcode: '7891012345678',
-    salePrice: 12.50,
-    costPrice: 4.20,
-    minStock: 200,
-    status: 'active',
-    createdAt: new Date('2026-01-15').toISOString(),
-    updatedAt: new Date('2026-01-15').toISOString()
-  },
-  {
-    id: 'prod-2',
-    companyId: 'company-1',
-    name: 'Paracetamol 750mg',
-    brand: 'EMS S/A',
-    description: 'Analgésico potente contra febre e dor de cabeça, embalagem com 20 comprimidos.',
-    sku: 'EMS-PAR-750',
-    barcode: '7891011223344',
-    salePrice: 15.80,
-    costPrice: 5.10,
-    minStock: 150,
-    status: 'active',
-    createdAt: new Date('2026-01-15').toISOString(),
-    updatedAt: new Date('2026-01-15').toISOString()
-  },
-  {
-    id: 'prod-3',
-    companyId: 'company-1',
-    name: 'Ibuprofeno 600mg',
-    brand: 'Neo Química',
-    description: 'Anti-inflamatório e analgésico de rápida ação, caixa com 20 cápsulas moles.',
-    sku: 'NEO-IBU-600',
-    barcode: '7892020202020',
-    salePrice: 22.90,
-    costPrice: 8.50,
-    minStock: 100,
-    status: 'active',
-    createdAt: new Date('2026-01-15').toISOString(),
-    updatedAt: new Date('2026-01-15').toISOString()
-  },
-  {
-    id: 'prod-4',
-    companyId: 'company-1',
-    name: 'Amoxicilina 500mg',
-    brand: 'Eurofarma',
-    description: 'Antibiótico de amplo espectro para infecções bacterianas comuns.',
-    sku: 'EUR-AMO-500',
-    barcode: '7893030303030',
-    salePrice: 45.00,
-    costPrice: 18.20,
-    minStock: 50,
-    status: 'active',
-    createdAt: new Date('2026-01-15').toISOString(),
-    updatedAt: new Date('2026-01-15').toISOString()
-  },
-  {
-    id: 'prod-5',
-    companyId: 'company-1',
-    name: 'Losartana Potássica 50mg',
-    brand: 'Prati-Donaduzzi',
-    description: 'Anti-hipertensivo de uso contínuo, embalagem econômica com 60 comprimidos.',
-    sku: 'PRATI-LOS-50',
-    barcode: '7894040404040',
-    salePrice: 18.00,
-    costPrice: 5.90,
-    minStock: 300,
-    status: 'active',
-    createdAt: new Date('2026-01-15').toISOString(),
-    updatedAt: new Date('2026-01-15').toISOString()
-  }
-];
+const INITIAL_PRODUCTS: Product[] = [];
 
-const INITIAL_PHARMACIES: Pharmacy[] = [
-  {
-    id: 'ph-1',
-    companyId: 'company-1',
-    name: 'Drogaria São Paulo - Centro',
-    legalName: 'Drogaria São Paulo S/A',
-    cnpj: '61.437.220/0001-70',
-    responsibleName: 'Farm. Ricardo Prado',
-    phone: '(11) 3214-4567',
-    whatsapp: '(11) 91122-3344',
-    email: 'dsp_centro@drogariasaopaulo.com.br',
-    cep: '01001-000',
-    address: 'Praça da Sé',
-    number: '110',
-    neighborhood: 'Centro Histórico',
-    city: 'São Paulo',
-    state: 'SP',
-    latitude: -23.5505,
-    longitude: -46.6333,
-    googleMapsUrl: 'https://maps.google.com/?q=-23.5505,-46.6333',
-    preferredDays: ['Seg', 'Qua'],
-    preferredTime: 'Manhã',
-    notes: 'Priorizar atendimento no início da manhã. Ricardo prefere contato por WhatsApp.',
-    status: 'active',
-    assignedSellerId: 'user-seller-rodrigo',
-    lastVisitDate: '2026-06-25T14:30:00Z',
-    nextVisitDate: '2026-07-03',
-    createdAt: new Date('2026-02-01').toISOString(),
-    updatedAt: new Date('2026-02-01').toISOString()
-  },
-  {
-    id: 'ph-2',
-    companyId: 'company-1',
-    name: 'Droga Raia - Cambuí',
-    legalName: 'Raia Drogasil S/A',
-    cnpj: '61.585.865/0120-99',
-    responsibleName: 'Juliana Mendes (Gerente)',
-    phone: '(19) 3251-9988',
-    whatsapp: '(19) 92233-4455',
-    email: 'raia_cambui@raiadrogasil.com.br',
-    cep: '13024-000',
-    address: 'Av. Júlio de Mesquita',
-    number: '850',
-    neighborhood: 'Cambuí',
-    city: 'Campinas',
-    state: 'SP',
-    latitude: -22.8944,
-    longitude: -47.0503,
-    googleMapsUrl: 'https://maps.google.com/?q=-22.8944,-47.0503',
-    preferredDays: ['Ter', 'Qui'],
-    preferredTime: 'Tarde',
-    notes: 'Fazer conferência de estoque físico antes de fechar novos pedidos.',
-    status: 'active',
-    assignedSellerId: 'user-seller-rodrigo',
-    lastVisitDate: '2026-06-26T15:00:00Z',
-    nextVisitDate: '2026-07-02',
-    createdAt: new Date('2026-02-01').toISOString(),
-    updatedAt: new Date('2026-02-01').toISOString()
-  },
-  {
-    id: 'ph-3',
-    companyId: 'company-1',
-    name: 'Farmácia Preço Popular - Taquaral',
-    legalName: 'Clamed Farmácias Ltda',
-    cnpj: '84.684.512/0350-10',
-    responsibleName: 'Carlos Henrique (Comprador)',
-    phone: '(19) 3208-1122',
-    whatsapp: '(19) 93344-5566',
-    email: 'fpp_taquaral@clamed.com.br',
-    cep: '13076-000',
-    address: 'Av. Nossa Senhora de Fátima',
-    number: '1220',
-    neighborhood: 'Taquaral',
-    city: 'Campinas',
-    state: 'SP',
-    latitude: -22.8791,
-    longitude: -47.0422,
-    googleMapsUrl: 'https://maps.google.com/?q=-22.8791,-47.0422',
-    preferredDays: ['Qua', 'Sex'],
-    preferredTime: 'Manhã',
-    notes: 'Solicitar reabastecimento de Dipirona e Ibuprofeno.',
-    status: 'active',
-    assignedSellerId: 'user-seller-rodrigo',
-    lastVisitDate: '2026-06-20T10:00:00Z',
-    nextVisitDate: '2026-07-04',
-    createdAt: new Date('2026-02-01').toISOString(),
-    updatedAt: new Date('2026-02-01').toISOString()
-  },
-  {
-    id: 'ph-4',
-    companyId: 'company-1',
-    name: 'Farma Ponte - Botafogo',
-    legalName: 'Grupo Farma Ponte S/A',
-    cnpj: '45.123.456/0002-88',
-    responsibleName: 'Dra. Sandra Regina',
-    phone: '(19) 3233-4455',
-    whatsapp: '(19) 94455-6677',
-    email: 'fp_botafogo@farmaponte.com.br',
-    cep: '13020-000',
-    address: 'Av. Barão de Itapura',
-    number: '1500',
-    neighborhood: 'Botafogo',
-    city: 'Campinas',
-    state: 'SP',
-    latitude: -22.8905,
-    longitude: -47.0612,
-    googleMapsUrl: 'https://maps.google.com/?q=-22.8905,-47.0612',
-    preferredDays: ['Ter', 'Qui'],
-    preferredTime: 'Manhã',
-    notes: 'Espaço bom para displays promocionais na entrada.',
-    status: 'active',
-    assignedSellerId: 'user-seller-rodrigo',
-    lastVisitDate: '2026-06-18T16:00:00Z',
-    nextVisitDate: '2026-07-02',
-    createdAt: new Date('2026-02-01').toISOString(),
-    updatedAt: new Date('2026-02-01').toISOString()
-  },
-  {
-    id: 'ph-5',
-    companyId: 'company-1',
-    name: 'Drogasil - Boulevard',
-    legalName: 'Raia Drogasil S/A',
-    cnpj: '61.585.865/0280-50',
-    responsibleName: 'Felipe Souza (Gerente)',
-    phone: '(16) 3610-1010',
-    whatsapp: '(16) 95566-7788',
-    email: 'drogasil_boulevard@raiadrogasil.com.br',
-    cep: '14020-000',
-    address: 'Av. do Café',
-    number: '500',
-    neighborhood: 'Boulevard',
-    city: 'Ribeirão Preto',
-    state: 'SP',
-    latitude: -21.1775,
-    longitude: -47.8103,
-    googleMapsUrl: 'https://maps.google.com/?q=-21.1775,-47.8103',
-    preferredDays: ['Seg', 'Sex'],
-    preferredTime: 'Tarde',
-    notes: 'Atendido por Mariana. Foco em repor antibióticos.',
-    status: 'active',
-    assignedSellerId: 'user-seller-mariana',
-    lastVisitDate: '2026-06-27T11:00:00Z',
-    nextVisitDate: '2026-07-06',
-    createdAt: new Date('2026-03-05').toISOString(),
-    updatedAt: new Date('2026-03-05').toISOString()
-  }
-];
+const INITIAL_PHARMACIES: Pharmacy[] = [];
 
-const INITIAL_MAIN_STOCK: MainStock[] = [
-  { id: 'ms-1', companyId: 'company-1', productId: 'prod-1', quantity: 2450, minQuantity: 200, status: 'normal', updatedAt: new Date().toISOString() },
-  { id: 'ms-2', companyId: 'company-1', productId: 'prod-2', quantity: 1800, minQuantity: 150, status: 'normal', updatedAt: new Date().toISOString() },
-  { id: 'ms-3', companyId: 'company-1', productId: 'prod-3', quantity: 120, minQuantity: 100, status: 'low', updatedAt: new Date().toISOString() },
-  { id: 'ms-4', companyId: 'company-1', productId: 'prod-4', quantity: 450, minQuantity: 50, status: 'normal', updatedAt: new Date().toISOString() },
-  { id: 'ms-5', companyId: 'company-1', productId: 'prod-5', quantity: 2900, minQuantity: 300, status: 'normal', updatedAt: new Date().toISOString() }
-];
+const INITIAL_MAIN_STOCK: MainStock[] = [];
 
-const INITIAL_SELLER_STOCK: SellerStock[] = [
-  // Stock with Rodrigo Silva
-  { id: 'ss-1', companyId: 'company-1', sellerId: 'user-seller-rodrigo', productId: 'prod-1', quantity: 150, lastUpdate: new Date().toISOString() },
-  { id: 'ss-2', companyId: 'company-1', sellerId: 'user-seller-rodrigo', productId: 'prod-2', quantity: 80, lastUpdate: new Date().toISOString() },
-  { id: 'ss-3', companyId: 'company-1', sellerId: 'user-seller-rodrigo', productId: 'prod-3', quantity: 45, lastUpdate: new Date().toISOString() },
-  { id: 'ss-4', companyId: 'company-1', sellerId: 'user-seller-rodrigo', productId: 'prod-4', quantity: 15, lastUpdate: new Date().toISOString() },
-  { id: 'ss-5', companyId: 'company-1', sellerId: 'user-seller-rodrigo', productId: 'prod-5', quantity: 120, lastUpdate: new Date().toISOString() },
-  // Stock with Mariana Costa
-  { id: 'ss-6', companyId: 'company-1', sellerId: 'user-seller-mariana', productId: 'prod-1', quantity: 200, lastUpdate: new Date().toISOString() },
-  { id: 'ss-7', companyId: 'company-1', sellerId: 'user-seller-mariana', productId: 'prod-2', quantity: 100, lastUpdate: new Date().toISOString() }
-];
+const INITIAL_SELLER_STOCK: SellerStock[] = [];
 
-const INITIAL_PHARMACY_STOCK: PharmacyStock[] = [
-  {
-    id: 'ps-1',
-    companyId: 'company-1',
-    pharmacyId: 'ph-1',
-    productId: 'prod-1',
-    sellerId: 'user-seller-rodrigo',
-    quantityDelivered: 100,
-    quantitySold: 75,
-    quantityRemaining: 25,
-    unitPrice: 12.50,
-    totalValue: 1250,
-    deliveryDate: '2026-06-10',
-    nextCheckDate: '2026-07-03',
-    status: 'low'
-  },
-  {
-    id: 'ps-2',
-    companyId: 'company-1',
-    pharmacyId: 'ph-2',
-    productId: 'prod-2',
-    sellerId: 'user-seller-rodrigo',
-    quantityDelivered: 50,
-    quantitySold: 42,
-    quantityRemaining: 8,
-    unitPrice: 15.80,
-    totalValue: 790,
-    deliveryDate: '2026-06-12',
-    nextCheckDate: '2026-07-02',
-    status: 'low'
-  },
-  {
-    id: 'ps-3',
-    companyId: 'company-1',
-    pharmacyId: 'ph-3',
-    productId: 'prod-5',
-    sellerId: 'user-seller-rodrigo',
-    quantityDelivered: 150,
-    quantitySold: 110,
-    quantityRemaining: 40,
-    unitPrice: 18.00,
-    totalValue: 2700,
-    deliveryDate: '2026-06-20',
-    nextCheckDate: '2026-07-04',
-    status: 'available'
-  }
-];
+const INITIAL_PHARMACY_STOCK: PharmacyStock[] = [];
 
-const INITIAL_SALES: Sale[] = [
-  {
-    id: 'sale-1',
-    companyId: 'company-1',
-    pharmacyId: 'ph-1',
-    sellerId: 'user-seller-rodrigo',
-    productId: 'prod-1',
-    quantity: 40,
-    unitPrice: 12.50,
-    discount: 5,
-    total: 475.00,
-    paymentStatus: 'paid',
-    saleDate: '2026-06-10T14:45:00Z',
-    notes: 'Pedido faturado e entregue no ato.',
-    latitude: -23.5505,
-    longitude: -46.6333,
-    createdAt: '2026-06-10T14:45:00Z'
-  },
-  {
-    id: 'sale-2',
-    companyId: 'company-1',
-    pharmacyId: 'ph-2',
-    sellerId: 'user-seller-rodrigo',
-    productId: 'prod-2',
-    quantity: 25,
-    unitPrice: 15.80,
-    discount: 0,
-    total: 395.00,
-    paymentStatus: 'paid',
-    saleDate: '2026-06-12T15:30:00Z',
-    latitude: -22.8944,
-    longitude: -47.0503,
-    createdAt: '2026-06-12T15:30:00Z'
-  },
-  {
-    id: 'sale-3',
-    companyId: 'company-1',
-    pharmacyId: 'ph-3',
-    sellerId: 'user-seller-rodrigo',
-    productId: 'prod-5',
-    quantity: 80,
-    unitPrice: 18.00,
-    discount: 10,
-    total: 1296.00,
-    paymentStatus: 'paid',
-    saleDate: '2026-06-20T10:30:00Z',
-    notes: 'Desconto de 10% autorizado pela diretoria.',
-    latitude: -22.8791,
-    longitude: -47.0422,
-    createdAt: '2026-06-20T10:30:00Z'
-  },
-  {
-    id: 'sale-4',
-    companyId: 'company-1',
-    pharmacyId: 'ph-1',
-    sellerId: 'user-seller-rodrigo',
-    productId: 'prod-4',
-    quantity: 5,
-    unitPrice: 45.00,
-    discount: 0,
-    total: 225.00,
-    paymentStatus: 'paid',
-    saleDate: '2026-06-25T14:40:00Z',
-    latitude: -23.5505,
-    longitude: -46.6333,
-    createdAt: '2026-06-25T14:40:00Z'
-  }
-];
+const INITIAL_SALES: Sale[] = [];
 
-const INITIAL_VISITS: Visit[] = [
-  {
-    id: 'vis-1',
-    companyId: 'company-1',
-    pharmacyId: 'ph-2',
-    sellerId: 'user-seller-rodrigo',
-    scheduledDate: '2026-07-02',
-    scheduledTime: '10:00',
-    objective: 'Reposição de estoque de Paracetamol e conferência física.',
-    status: 'scheduled',
-    createdAt: '2026-06-30T10:00:00Z',
-    updatedAt: '2026-06-30T10:00:00Z'
-  },
-  {
-    id: 'vis-2',
-    companyId: 'company-1',
-    pharmacyId: 'ph-4',
-    sellerId: 'user-seller-rodrigo',
-    scheduledDate: '2026-07-02',
-    scheduledTime: '14:30',
-    objective: 'Apresentação do novo catálogo e fechamento de novos lotes.',
-    status: 'scheduled',
-    createdAt: '2026-06-30T10:05:00Z',
-    updatedAt: '2026-06-30T10:05:00Z'
-  },
-  {
-    id: 'vis-3',
-    companyId: 'company-1',
-    pharmacyId: 'ph-1',
-    sellerId: 'user-seller-rodrigo',
-    scheduledDate: '2026-07-03',
-    scheduledTime: '09:00',
-    objective: 'Visita de relacionamento e pós-venda da última entrega.',
-    status: 'scheduled',
-    createdAt: '2026-06-30T10:10:00Z',
-    updatedAt: '2026-06-30T10:10:00Z'
-  },
-  {
-    id: 'vis-4',
-    companyId: 'company-1',
-    pharmacyId: 'ph-5',
-    sellerId: 'user-seller-mariana',
-    scheduledDate: '2026-07-06',
-    scheduledTime: '15:00',
-    objective: 'Verificação de devolução de produtos e nova remessa.',
-    status: 'scheduled',
-    createdAt: '2026-06-30T11:00:00Z',
-    updatedAt: '2026-06-30T11:00:00Z'
-  },
-  {
-    id: 'vis-past-1',
-    companyId: 'company-1',
-    pharmacyId: 'ph-1',
-    sellerId: 'user-seller-rodrigo',
-    scheduledDate: '2026-06-25',
-    scheduledTime: '14:00',
-    objective: 'Verificar estoque consignado.',
-    status: 'completed',
-    checkInAt: '2026-06-25T14:15:00Z',
-    checkOutAt: '2026-06-25T14:50:00Z',
-    checkInLatitude: -23.5505,
-    checkInLongitude: -46.6333,
-    notes: 'Atendimento tranquilo com o Ricardo. Fechada venda de 5 unidades de Amoxicilina.',
-    result: 'Venda realizada com sucesso.',
-    createdAt: '2026-06-24T08:00:00Z',
-    updatedAt: '2026-06-25T14:50:00Z'
-  }
-];
+const INITIAL_VISITS: Visit[] = [];
 
-const INITIAL_GOALS: Goal[] = [
-  {
-    id: 'goal-rodrigo-7-2026',
-    companyId: 'company-1',
-    sellerId: 'user-seller-rodrigo',
-    month: 7,
-    year: 2026,
-    salesGoal: 50,
-    visitsGoal: 20,
-    revenueGoal: 15000.00,
-    currentSales: 0,
-    currentVisits: 0,
-    currentRevenue: 0
-  },
-  {
-    id: 'goal-mariana-7-2026',
-    companyId: 'company-1',
-    sellerId: 'user-seller-mariana',
-    month: 7,
-    year: 2026,
-    salesGoal: 40,
-    visitsGoal: 15,
-    revenueGoal: 12000.00,
-    currentSales: 0,
-    currentVisits: 0,
-    currentRevenue: 0
-  }
-];
+const INITIAL_GOALS: Goal[] = [];
 
-const INITIAL_AUTOMATION_RULES: AutomationRule[] = [
-  {
-    id: 'auto-1',
-    companyId: 'company-1',
-    name: 'Lembrete de Visita de Amanhã',
-    triggerType: 'before_visit',
-    daysOffset: 1,
-    messageTemplate: 'Olá, {{responsibleName}}! Aqui é o Rodrigo Silva, representante da {{companyName}}. Passando para confirmar que realizaremos uma visita à {{pharmacyName}} amanhã, dia {{date}} às {{time}}h para reabastecimento. Até logo!',
-    active: true,
-    createdBy: 'user-admin'
-  },
-  {
-    id: 'auto-2',
-    companyId: 'company-1',
-    name: 'Alerta de Baixo Estoque',
-    triggerType: 'stock_low',
-    daysOffset: 0,
-    messageTemplate: 'Olá {{responsibleName}}, notamos que o estoque dos seguintes produtos na {{pharmacyName}} está baixo: {{productNames}}. Gostaria de agendar uma visita para reposição esta semana?',
-    active: true,
-    createdBy: 'user-admin'
-  },
-  {
-    id: 'auto-3',
-    companyId: 'company-1',
-    name: 'Agradecimento após Venda',
-    triggerType: 'after_sale',
-    daysOffset: 0,
-    messageTemplate: 'Olá, {{responsibleName}}! Muito obrigado pela parceria na compra realizada hoje na {{pharmacyName}} no valor total de {{saleTotal}}. Já estamos preparando o faturamento.',
-    active: true,
-    createdBy: 'user-admin'
-  }
-];
+const INITIAL_AUTOMATION_RULES: AutomationRule[] = [];
 
-const INITIAL_NOTIFICATIONS: SystemNotification[] = [
-  {
-    id: 'not-1',
-    companyId: 'company-1',
-    userId: 'user-admin',
-    title: 'Estoque Baixo Registrado',
-    message: 'O estoque de Ibuprofeno 600mg na farmácia Droga Raia - Cambuí está classificado como BAIXO.',
-    type: 'warning',
-    read: false,
-    relatedClass: 'PharmacyStock',
-    relatedObjectId: 'ps-2',
-    createdAt: new Date().toISOString()
-  },
-  {
-    id: 'not-2',
-    companyId: 'company-1',
-    userId: 'user-seller-rodrigo',
-    title: 'Visitas Agendadas para Hoje',
-    message: 'Você possui 2 visitas programadas para hoje em Campinas. Abra sua rota inteligente!',
-    type: 'info',
-    read: false,
-    relatedClass: 'Visit',
-    relatedObjectId: 'vis-1',
-    createdAt: new Date().toISOString()
-  }
-];
+const INITIAL_NOTIFICATIONS: SystemNotification[] = [];
 
-const INITIAL_WHATSAPP_MESSAGES: WhatsappMessage[] = [
-  {
-    id: 'msg-1',
-    companyId: 'company-1',
-    pharmacyId: 'ph-2',
-    sellerId: 'user-seller-rodrigo',
-    phone: '(19) 92233-4455',
-    message: 'Olá, Juliana Mendes! Passando para confirmar que realizaremos uma visita à Droga Raia - Cambuí amanhã, dia 02/07 às 10:00h para reabastecimento.',
-    type: 'visit_reminder',
-    status: 'sent',
-    scheduledAt: new Date(Date.now() - 3600000 * 20).toISOString(),
-    sentAt: new Date(Date.now() - 3600000 * 19).toISOString()
-  }
-];
+const INITIAL_WHATSAPP_MESSAGES: WhatsappMessage[] = [];
 
-const INITIAL_EXPENSES: Expense[] = [
-  {
-    id: 'exp-1',
-    companyId: 'company-1',
-    sellerId: 'user-seller-rodrigo',
-    title: 'Abastecimento de Combustível',
-    description: 'Posto Shell Campinas - Visitas do dia',
-    amount: 140.00,
-    category: 'Combustível',
-    expenseDate: '2026-06-25',
-    createdAt: new Date('2026-06-25').toISOString()
-  },
-  {
-    id: 'exp-2',
-    companyId: 'company-1',
-    sellerId: 'user-seller-rodrigo',
-    title: 'Almoço Executivo',
-    description: 'Restaurante Varandão Cambuí',
-    amount: 45.90,
-    category: 'Alimentação',
-    expenseDate: '2026-06-25',
-    createdAt: new Date('2026-06-25').toISOString()
-  }
-];
+const INITIAL_EXPENSES: Expense[] = [];
 
-const INITIAL_LOGS: SystemLog[] = [
-  {
-    id: 'log-1',
-    companyId: 'company-1',
-    userId: 'user-admin',
-    action: 'LOGIN',
-    className: '_User',
-    objectId: 'user-admin',
-    description: 'Usuário administrador efetuou login no sistema.',
-    ip: '192.168.1.100',
-    createdAt: new Date(Date.now() - 3600000 * 5).toISOString()
-  }
-];
+const INITIAL_LOGS: SystemLog[] = [];
 
 // Helper to safely parse JSON from localStorage
 function getStore<T>(key: string, defaultValue: T): T {
@@ -792,6 +213,7 @@ async function syncCollectionToBack4App(className: string, data: any, config: Ba
     delete cleanItem.createdAt;
     delete cleanItem.updatedAt;
     delete cleanItem.id; // Delete id because it is reserved in Parse Server and causes "invalid field name" errors
+    delete cleanItem.className; // Delete className because it is reserved in Parse Server and causes "invalid field name" errors
 
     const parseObjectId = idMap.get(localId);
     if (parseObjectId) {
@@ -902,6 +324,22 @@ function setStore<T>(key: string, data: T): void {
 
 // Seed Database if empty or first-time
 export function initializeDB(): void {
+  const mockCleanedKey = 'pharmaroute_mock_cleaned_v6';
+  if (!localStorage.getItem(mockCleanedKey)) {
+    const oldConfig = localStorage.getItem(KEYS.BACK4APP_CONFIG);
+    const oldCurrentUser = localStorage.getItem(KEYS.CURRENT_USER);
+    
+    // Clear old keys to remove all mock data
+    Object.values(KEYS).forEach(k => {
+      localStorage.removeItem(k);
+    });
+    
+    if (oldConfig) localStorage.setItem(KEYS.BACK4APP_CONFIG, oldConfig);
+    if (oldCurrentUser) localStorage.setItem(KEYS.CURRENT_USER, oldCurrentUser);
+    
+    localStorage.setItem(mockCleanedKey, 'true');
+  }
+
   getStore<User[]>(KEYS.USERS, INITIAL_USERS);
   getStore<Company>(KEYS.COMPANY, DEFAULT_COMPANY);
   getStore<Product[]>(KEYS.PRODUCTS, INITIAL_PRODUCTS);
@@ -1049,25 +487,48 @@ export const DB = {
 
   // Log Activity
   logAction(action: string, className: string, objectId: string, description: string): void {
-    const logs = getStore<SystemLog[]>(KEYS.SYSTEM_LOGS, []);
+    const logs = getStore<any[]>(KEYS.SYSTEM_LOGS, []);
+    let migrated = false;
+    const migratedLogs = logs.map(log => {
+      if (log && log.className !== undefined) {
+        log.targetClass = log.targetClass || log.className;
+        delete log.className;
+        migrated = true;
+      }
+      return log;
+    });
+
     const user = this.getCurrentUser();
     const newLog: SystemLog = {
       id: `log-${Date.now()}`,
       companyId: 'company-1',
       userId: user?.id || 'system',
       action,
-      className,
+      targetClass: className,
       objectId,
       description,
       ip: '127.0.0.1',
       createdAt: new Date().toISOString()
     };
-    logs.unshift(newLog);
-    setStore(KEYS.SYSTEM_LOGS, logs.slice(0, 500)); // keep last 500 logs
+    migratedLogs.unshift(newLog);
+    setStore(KEYS.SYSTEM_LOGS, migratedLogs.slice(0, 500)); // keep last 500 logs
   },
 
   getSystemLogs(): SystemLog[] {
-    return getStore<SystemLog[]>(KEYS.SYSTEM_LOGS, []);
+    const logs = getStore<any[]>(KEYS.SYSTEM_LOGS, []);
+    let migrated = false;
+    const migratedLogs = logs.map(log => {
+      if (log && log.className !== undefined) {
+        log.targetClass = log.targetClass || log.className;
+        delete log.className;
+        migrated = true;
+      }
+      return log;
+    });
+    if (migrated) {
+      setStore(KEYS.SYSTEM_LOGS, migratedLogs);
+    }
+    return migratedLogs;
   },
 
   // Auth Operations
@@ -1217,6 +678,27 @@ export const DB = {
     }
   },
 
+  deletePharmacy(id: string): void {
+    const pharmacies = getStore<Pharmacy[]>(KEYS.PHARMACIES, []);
+    const index = pharmacies.findIndex(p => p.id === id);
+    if (index !== -1) {
+      const pName = pharmacies[index].name;
+      pharmacies.splice(index, 1);
+      setStore(KEYS.PHARMACIES, pharmacies);
+      this.logAction('DELETE', 'Pharmacy', id, `Farmácia removida do sistema: ${pName}`);
+      deleteFromBack4App('Pharmacy', id).catch(err => {
+        console.error('Error deleting pharmacy from Back4App:', err);
+      });
+
+      // Optionally clean up pharmacy stock
+      const pStock = getStore<PharmacyStock[]>(KEYS.PHARMACY_STOCK, INITIAL_PHARMACY_STOCK);
+      const filteredStock = pStock.filter(ps => ps.pharmacyId !== id);
+      if (filteredStock.length !== pStock.length) {
+        setStore(KEYS.PHARMACY_STOCK, filteredStock);
+      }
+    }
+  },
+
   // Products Management
   getProducts(): Product[] {
     return getStore<Product[]>(KEYS.PRODUCTS, INITIAL_PRODUCTS);
@@ -1260,6 +742,32 @@ export const DB = {
     }
   },
 
+  deleteProduct(id: string): void {
+    const products = getStore<Product[]>(KEYS.PRODUCTS, []);
+    const index = products.findIndex(p => p.id === id);
+    if (index !== -1) {
+      const prodName = products[index].name;
+      products.splice(index, 1);
+      setStore(KEYS.PRODUCTS, products);
+      this.logAction('DELETE', 'Product', id, `Produto removido do catálogo: ${prodName}`);
+      deleteFromBack4App('Product', id).catch(err => {
+        console.error('Error deleting product from Back4App:', err);
+      });
+
+      // Also clean up main stock entry for this product
+      const mainStock = getStore<MainStock[]>(KEYS.MAIN_STOCK, INITIAL_MAIN_STOCK);
+      const stockIdx = mainStock.findIndex(ms => ms.productId === id);
+      if (stockIdx !== -1) {
+        const stockId = mainStock[stockIdx].id;
+        mainStock.splice(stockIdx, 1);
+        setStore(KEYS.MAIN_STOCK, mainStock);
+        deleteFromBack4App('MainStock', stockId).catch(err => {
+          console.error('Error deleting related stock entry from Back4App:', err);
+        });
+      }
+    }
+  },
+
   // Main Stock
   getMainStock(): MainStock[] {
     return getStore<MainStock[]>(KEYS.MAIN_STOCK, INITIAL_MAIN_STOCK);
@@ -1299,6 +807,110 @@ export const DB = {
           relatedObjectId: mainStock[index].id
         });
       }
+    }
+  },
+
+  updateMainStockEntry(id: string, quantity: number, minQuantity: number): void {
+    const mainStock = getStore<MainStock[]>(KEYS.MAIN_STOCK, INITIAL_MAIN_STOCK);
+    const index = mainStock.findIndex(ms => ms.id === id);
+    if (index !== -1) {
+      let status: 'normal' | 'low' | 'empty' = 'normal';
+      if (quantity === 0) status = 'empty';
+      else if (quantity < minQuantity) status = 'low';
+
+      mainStock[index] = {
+        ...mainStock[index],
+        quantity,
+        minQuantity,
+        status,
+        updatedAt: new Date().toISOString()
+      };
+      setStore(KEYS.MAIN_STOCK, mainStock);
+
+      const products = this.getProducts();
+      const pName = products.find(p => p.id === mainStock[index].productId)?.name || 'Produto';
+      this.logAction('STOCK_ADJUST', 'MainStock', id, `Atualizado registro de estoque: ${pName} (Qtd: ${quantity}, Mín: ${minQuantity})`);
+
+      // Trigger automatic warning notification if low/empty
+      if (status !== 'normal') {
+        this.createNotification({
+          userId: 'user-admin',
+          title: status === 'empty' ? 'Estoque Zerado!' : 'Estoque Central Baixo!',
+          message: `O estoque do produto ${pName} está em estado crítico (${quantity} de ${minQuantity} un).`,
+          type: 'warning',
+          relatedClass: 'MainStock',
+          relatedObjectId: id
+        });
+      }
+
+      // Sync to Back4App Parse Server if configured
+      triggerBack4AppSync(KEYS.MAIN_STOCK, mainStock);
+    } else {
+      throw new Error('Registro de estoque não encontrado.');
+    }
+  },
+
+  createMainStockEntry(productId: string, quantity: number, minQuantity: number): MainStock {
+    const mainStock = getStore<MainStock[]>(KEYS.MAIN_STOCK, INITIAL_MAIN_STOCK);
+    
+    // Check if it already exists
+    const existingIdx = mainStock.findIndex(ms => ms.productId === productId);
+    if (existingIdx !== -1) {
+      mainStock[existingIdx].quantity += quantity;
+      if (minQuantity > 0) {
+        mainStock[existingIdx].minQuantity = minQuantity;
+      }
+      let status: 'normal' | 'low' | 'empty' = 'normal';
+      if (mainStock[existingIdx].quantity === 0) status = 'empty';
+      else if (mainStock[existingIdx].quantity < mainStock[existingIdx].minQuantity) status = 'low';
+      mainStock[existingIdx].status = status;
+      mainStock[existingIdx].updatedAt = new Date().toISOString();
+      setStore(KEYS.MAIN_STOCK, mainStock);
+      
+      const pName = this.getProducts().find(p => p.id === productId)?.name || 'Produto';
+      this.logAction('STOCK_ADJUST', 'MainStock', mainStock[existingIdx].id, `Adicionado estoque ao item existente: ${pName} (+${quantity})`);
+      return mainStock[existingIdx];
+    }
+
+    const products = this.getProducts();
+    const prod = products.find(p => p.id === productId);
+    if (!prod) throw new Error('Produto não encontrado.');
+
+    let status: 'normal' | 'low' | 'empty' = 'normal';
+    if (quantity === 0) status = 'empty';
+    else if (quantity < minQuantity) status = 'low';
+
+    const newEntry: MainStock = {
+      id: `ms-${Date.now()}`,
+      companyId: 'company-1',
+      productId,
+      quantity,
+      minQuantity,
+      status,
+      updatedAt: new Date().toISOString()
+    };
+
+    mainStock.push(newEntry);
+    setStore(KEYS.MAIN_STOCK, mainStock);
+
+    this.logAction('CREATE', 'MainStock', newEntry.id, `Criado registro de estoque para: ${prod.name} (${quantity} un)`);
+    return newEntry;
+  },
+
+  deleteMainStockEntry(id: string): void {
+    const mainStock = getStore<MainStock[]>(KEYS.MAIN_STOCK, INITIAL_MAIN_STOCK);
+    const index = mainStock.findIndex(ms => ms.id === id);
+    if (index !== -1) {
+      const ms = mainStock[index];
+      const prod = this.getProducts().find(p => p.id === ms.productId);
+      const prodName = prod ? prod.name : 'Produto';
+      
+      mainStock.splice(index, 1);
+      setStore(KEYS.MAIN_STOCK, mainStock);
+      this.logAction('DELETE', 'MainStock', id, `Removido registro de estoque geral do produto: ${prodName}`);
+      deleteFromBack4App('MainStock', id).catch(err => {
+        console.error('Error deleting main stock entry from Back4App:', err);
+      });
     }
   },
 
@@ -1602,6 +1214,21 @@ export const DB = {
 
       const pName = this.getPharmacies().find(ph => ph.id === updated.pharmacyId)?.name || 'Farmácia';
       this.logAction('VISIT_UPDATE', 'Visit', updated.id, `Status da visita na ${pName} alterado para: ${updated.status}`);
+    }
+  },
+
+  deleteVisit(id: string): void {
+    const visits = getStore<Visit[]>(KEYS.VISITS, INITIAL_VISITS);
+    const index = visits.findIndex(v => v.id === id);
+    if (index !== -1) {
+      const pName = this.getPharmacies().find(ph => ph.id === visits[index].pharmacyId)?.name || 'Farmácia';
+      const scheduledDate = visits[index].scheduledDate;
+      visits.splice(index, 1);
+      setStore(KEYS.VISITS, visits);
+      this.logAction('DELETE', 'Visit', id, `Visita para ${pName} agendada para ${scheduledDate} foi removida`);
+      deleteFromBack4App('Visit', id).catch(err => {
+        console.error('Error deleting visit from Back4App:', err);
+      });
     }
   },
 

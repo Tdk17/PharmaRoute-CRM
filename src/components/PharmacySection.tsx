@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Building2, 
   MapPin, 
@@ -22,7 +22,9 @@ import {
   ChevronRight,
   Package,
   Clock,
-  User
+  User,
+  Trash2,
+  AlertTriangle
 } from 'lucide-react';
 import { DB } from '../services/db';
 import { Pharmacy, PharmacyStock, Sale, Visit, User as UserType } from '../types';
@@ -34,16 +36,40 @@ interface PharmacySectionProps {
 }
 
 export default function PharmacySection({ currentUser, onNavigateToSale, onNavigateToSchedule }: PharmacySectionProps) {
-  const pharmacies = DB.getPharmacies();
-  const sellers = DB.getUsers().filter(u => u.roleType === 'seller');
-  const allSales = DB.getSales();
-  const allVisits = DB.getVisits();
-  const pStocks = DB.getPharmacyStock();
-  const products = DB.getProducts();
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const pharmacies = useMemo(() => DB.getPharmacies(), [refreshKey]);
+  const sellers = useMemo(() => DB.getUsers().filter(u => u.roleType === 'seller'), [refreshKey]);
+  const allSales = useMemo(() => DB.getSales(), [refreshKey]);
+  const allVisits = useMemo(() => DB.getVisits(), [refreshKey]);
+  const pStocks = useMemo(() => DB.getPharmacyStock(), [refreshKey]);
+  const products = useMemo(() => DB.getProducts(), [refreshKey]);
 
   // Navigation State inside Section
   const [viewMode, setViewMode] = useState<'list' | 'create' | 'detail' | 'edit'>('list');
   const [selectedPharmacyId, setSelectedPharmacyId] = useState<string | null>(null);
+
+  // Delete Pharmacy states
+  const [deletingPharmacyId, setDeletingPharmacyId] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState('');
+
+  const confirmDeletePharmacy = () => {
+    if (!deletingPharmacyId) return;
+    try {
+      DB.deletePharmacy(deletingPharmacyId);
+      setDeletingPharmacyId(null);
+      setSelectedPharmacyId(null);
+      setViewMode('list');
+      setRefreshKey(prev => prev + 1);
+    } catch (err: any) {
+      setDeleteError(err.message || 'Erro ao remover farmácia do banco de dados.');
+    }
+  };
+
+  const deletingPharmacyObj = useMemo(() => {
+    if (!deletingPharmacyId) return null;
+    return pharmacies.find(p => p.id === deletingPharmacyId);
+  }, [deletingPharmacyId, pharmacies]);
 
   // Search & Filters state
   const [searchQuery, setSearchQuery] = useState('');
@@ -349,10 +375,25 @@ export default function PharmacySection({ currentUser, onNavigateToSale, onNavig
                     </div>
 
                     <div className="mt-4 pt-3 border-t border-gray-50 flex items-center justify-between text-[11px] text-gray-400">
-                      <span>Última visita:</span>
-                      <span className="font-semibold text-slate-700">
-                        {ph.lastVisitDate ? new Date(ph.lastVisitDate).toLocaleDateString('pt-BR') : 'Nenhuma realizada'}
-                      </span>
+                      <div>
+                        <span>Última visita: </span>
+                        <span className="font-semibold text-slate-700">
+                          {ph.lastVisitDate ? new Date(ph.lastVisitDate).toLocaleDateString('pt-BR') : 'Nenhuma realizada'}
+                        </span>
+                      </div>
+                      {currentUser.roleType === 'admin' && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeletingPharmacyId(ph.id);
+                            setDeleteError('');
+                          }}
+                          className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors cursor-pointer"
+                          title="Excluir Farmácia"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 );
@@ -682,6 +723,19 @@ export default function PharmacySection({ currentUser, onNavigateToSale, onNavig
               >
                 <PlusCircle className="w-3.5 h-3.5" /> Nova Venda
               </button>
+
+              {currentUser.roleType === 'admin' && (
+                <button 
+                  onClick={() => {
+                    setDeletingPharmacyId(selectedPharmacy.id);
+                    setDeleteError('');
+                  }}
+                  className="bg-red-50 text-red-600 text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-red-100 flex items-center gap-1 cursor-pointer"
+                  title="Remover Farmácia permanentemente"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Excluir
+                </button>
+              )}
             </div>
           </div>
 
@@ -892,6 +946,72 @@ export default function PharmacySection({ currentUser, onNavigateToSale, onNavig
 
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* DELETE PHARMACY CONFIRMATION MODAL */}
+      {deletingPharmacyId && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full border border-gray-100 overflow-hidden transform scale-100 transition-all text-left text-xs">
+            <div className="bg-red-50 p-5 border-b border-red-100 flex justify-between items-center">
+              <div className="flex items-center gap-2 text-red-900">
+                <AlertTriangle className="w-5 h-5 text-red-600 animate-pulse" />
+                <h3 className="font-bold text-sm">Remover Farmácia do Sistema</h3>
+              </div>
+              <button 
+                onClick={() => setDeletingPharmacyId(null)}
+                className="text-gray-400 hover:text-gray-600 font-bold text-base cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {deleteError && (
+                <div className="p-3 bg-red-50 text-red-700 border border-red-100 rounded-lg text-xs font-semibold">
+                  {deleteError}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  Tem certeza absoluta de que deseja remover a seguinte farmácia de forma permanente?
+                </p>
+                {deletingPharmacyObj ? (
+                  <div className="p-3.5 bg-slate-50 border border-gray-100 rounded-xl">
+                    <p className="font-bold text-gray-900 text-xs">{deletingPharmacyObj.name}</p>
+                    <p className="text-[10px] text-gray-400 font-mono mt-0.5">
+                      CNPJ: {deletingPharmacyObj.cnpj} • {deletingPharmacyObj.city} - {deletingPharmacyObj.state}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-slate-50 border border-gray-100 rounded-xl">
+                    <p className="font-semibold text-gray-800 text-xs">Farmácia selecionada</p>
+                  </div>
+                )}
+                <p className="text-[11px] text-red-500 font-medium leading-relaxed">
+                  ⚠️ Esta ação excluirá a farmácia permanentemente de todos os relatórios, visitas e do banco de dados (local e Back4App)!
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
+                <button 
+                  type="button"
+                  onClick={() => setDeletingPharmacyId(null)}
+                  className="px-4 py-2 bg-slate-50 border border-gray-200 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  type="button"
+                  onClick={confirmDeletePharmacy}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                >
+                  Confirmar Exclusão
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
